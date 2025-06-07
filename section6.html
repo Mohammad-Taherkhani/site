@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GDD - بخش ششم: بنیان فنی</title>
+    <style>
+        /* CSS کامل و یکسان با صفحات دیگر در اینجا قرار دارد */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Lalezar&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap');
+        :root {
+            --font-pixel: 'Press Start 2P', cursive; --font-title-fa: 'Lalezar', cursive; --font-body: 'Vazirmatn', sans-serif;
+            --color-bg: #1e1e1e; --color-paper: #3d3d3d; --color-text: #ecf0f1; --color-primary: #e74c3c;
+            --color-secondary: #e84393; --color-accent: #f1c40f; --color-dark-shadow: #121212;
+        }
+        body { background-color: var(--color-bg); font-family: var(--font-body); color: var(--color-text); }
+        .page { background-color: var(--color-paper); width: 21cm; min-height: 29.7cm; padding: 1.5cm; margin: 2rem auto; border: 5px solid var(--color-dark-shadow); box-shadow: 10px 10px 0px var(--color-dark-shadow); box-sizing: border-box; }
+        h2 { font-family: var(--font-title-fa); font-size: 38px; border-bottom: 5px solid var(--color-dark-shadow); padding-bottom: 15px; margin-top: 40px; margin-bottom: 25px; color:#fff; }
+        h3 { font-family: var(--font-title-fa); font-size: 28px; color: var(--color-accent); text-shadow: 2px 2px 0 var(--color-dark-shadow); margin-top: 35px; margin-bottom: 15px; }
+        h4 { font-family: var(--font-pixel); font-size: 16px; color: var(--color-secondary); text-shadow: 1px 1px 0 var(--color-dark-shadow); margin-top: 30px; margin-bottom: 15px; border-bottom: 2px dotted rgba(255,255,255,0.2); padding-bottom: 10px; }
+        p { font-size: 16px; line-height: 1.9; text-align: justify; }
+        strong { font-weight: 700; color: #fff; }
+        code { background-color: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; font-family: var(--font-pixel); font-size: 14px; color: var(--color-accent); }
+        .page-nav { display:flex; justify-content:space-between; margin-bottom: 2rem; border-bottom: 4px solid var(--color-dark-shadow); padding-bottom: 1rem;}
+        .nav-button { text-decoration: none; font-family: var(--font-body); font-weight: 700; background-color: #4a4a4a; color: #fff; padding: 10px 20px; border: 2px solid var(--color-dark-shadow); border-bottom-width: 5px; transition: all 0.1s ease; } .nav-button:hover { background-color: var(--color-accent); color: var(--color-dark-shadow);}
+    </style>
+</head>
+<body>
+    <div class="page">
+        <nav class="page-nav">
+            <a href="section5.html" class="nav-button">&lt; بخش قبلی</a>
+            <a href="index.html" class="nav-button">بازگشت به فهرست</a>
+            <span></span> </nav>
+
+        <section id="section-6">
+            <h2 class="section-title">۶. بنیان فنی: قدرت موتور گودو</h2>
+            <p>
+                بازی "Rust and Roots" با استفاده از موتور بازی‌سازی <strong>گودو (Godot Engine)</strong> ساخته شده است. این موتور به دلیل ماهیت رایگان و متن-باز، جامعه فعال و ابزارهای قدرتمند و یکپارچه برای ساخت بازی‌های دوبعدی، به عنوان انتخاب اصلی برای این پروژه در نظر گرفته شد. [cite: 1] در این بخش، به بررسی قابلیت‌های کلیدی گودو که ستون‌های فنی این بازی را تشکیل داده‌اند، می‌پردازیم.
+            </p>
+
+            <h3>۶.۱: معماری صحنه و نود (Scene & Node)</h3>
+            <p>
+                فلسفه اصلی گودو بر پایه ساختار درختی از **نودها (Nodes)** و ترکیب آن‌ها در قالب **صحنه‌ها (Scenes)** استوار است. [cite: 1] ما از این معماری ماژولار به طور کامل بهره برده‌ایم. هر عنصر در بازی، یک صحنه مستقل است:
+            </p>
+            <ul>
+                <li><strong>صحنه بازیکن (`player.tscn`):** شامل تمام منطق حرکت، پرش، تیراندازی و انیمیشن‌های پینکو.</li>
+                <li><strong>صحنه دشمنان (`enemy.tscn`):** شامل ظاهر، رفتار و منطق مرگ دشمنان.</li>
+                <li><strong>صحنه گلوله (`bullet.tscn`):** شامل منطق حرکت و برخورد پرتابه.</li>
+            </ul>
+            <p>
+                این ساختار به ما اجازه می‌دهد تا هر جزء را به صورت جداگانه طراحی و تست کنیم و سپس به راحتی آن‌ها را در صحنه‌های مراحل مختلف بازی، نمونه‌سازی (instantiate) کرده و در کنار هم قرار دهیم. این روش، توسعه و مدیریت پروژه را بسیار ساده‌تر می‌کند.
+            </p>
+
+            <h3>۶.۲: زبان اسکریپت‌نویسی GDScript</h3>
+            <p>
+                تمام منطق گیم‌پلی بازی "Rust and Roots" با استفاده از <strong>GDScript</strong>، زبان اسکریپت‌نویسی اختصاصی گودو، پیاده‌سازی شده است. این زبان به دلیل ویژگی‌های زیر برای این پروژه ایده‌آل بود:
+            </p>
+            <ul>
+                <li><strong>یکپارچگی کامل با موتور:</strong> GDScript به صورت مستقیم با تمام نودها، سیگنال‌ها و APIهای گودو در ارتباط است و نیاز به واسطه‌های اضافی ندارد.</li>
+                <li><strong>سینتکس ساده و خوانا:</strong> سینتکس این زبان که شباهت زیادی به پایتون دارد، نوشتن کد و درک آن را بسیار آسان می‌کند و سرعت توسعه را بالا می‌برد. [cite: 1]</li>
+                <li><strong>سرعت بالا:</strong> با وجود سادگی، GDScript برای اکثر وظایف گیم‌پلی به اندازه کافی سریع و بهینه است.</li>
+            </ul>
+
+            <div id="part2-placeholder"></div>
+            <div id="part3-placeholder"></div>
+
+        </section>
+    </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GDD - بخش ششم: بنیان فنی</title>
+    <style>
+        /* CSS کامل و یکسان با صفحات دیگر در اینجا قرار دارد */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Lalezar&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap');
+        :root {
+            --font-pixel: 'Press Start 2P', cursive; --font-title-fa: 'Lalezar', cursive; --font-body: 'Vazirmatn', sans-serif;
+            --color-bg: #1e1e1e; --color-paper: #3d3d3d; --color-text: #ecf0f1; --color-primary: #e74c3c;
+            --color-secondary: #e84393; --color-accent: #f1c40f; --color-dark-shadow: #121212;
+        }
+        body { background-color: var(--color-bg); font-family: var(--font-body); color: var(--color-text); }
+        .page { background-color: var(--color-paper); width: 21cm; min-height: 29.7cm; padding: 1.5cm; margin: 2rem auto; border: 5px solid var(--color-dark-shadow); box-shadow: 10px 10px 0px var(--color-dark-shadow); box-sizing: border-box; }
+        h2 { font-family: var(--font-title-fa); font-size: 38px; border-bottom: 5px solid var(--color-dark-shadow); padding-bottom: 15px; margin-top: 40px; margin-bottom: 25px; color:#fff; }
+        h3 { font-family: var(--font-title-fa); font-size: 28px; color: var(--color-accent); text-shadow: 2px 2px 0 var(--color-dark-shadow); margin-top: 35px; margin-bottom: 15px; }
+        h4 { font-family: var(--font-pixel); font-size: 16px; color: var(--color-secondary); text-shadow: 1px 1px 0 var(--color-dark-shadow); margin-top: 30px; margin-bottom: 15px; border-bottom: 2px dotted rgba(255,255,255,0.2); padding-bottom: 10px; }
+        p { font-size: 16px; line-height: 1.9; text-align: justify; }
+        strong { font-weight: 700; color: #fff; }
+        code { background-color: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; font-family: var(--font-pixel); font-size: 14px; color: var(--color-accent); }
+        ul { list-style: none; padding-right: 25px; }
+        li { padding: 15px 15px 15px 0; margin-bottom: 12px; position: relative; }
+        li::before { content: '>'; font-family: var(--font-pixel); color: var(--color-secondary); font-size: 20px; position: absolute; right: -25px; top: 18px; text-shadow: 1px 1px 0 var(--color-dark-shadow); }
+        .page-nav { display:flex; justify-content:space-between; margin-bottom: 2rem; border-bottom: 4px solid var(--color-dark-shadow); padding-bottom: 1rem;}
+        .nav-button { text-decoration: none; font-family: var(--font-body); font-weight: 700; background-color: #4a4a4a; color: #fff; padding: 10px 20px; border: 2px solid var(--color-dark-shadow); border-bottom-width: 5px; transition: all 0.1s ease; } .nav-button:hover { background-color: var(--color-accent); color: var(--color-dark-shadow);}
+    </style>
+</head>
+<body>
+    <div class="page">
+        <nav class="page-nav">
+            <a href="section5.html" class="nav-button">&lt; بخش قبلی</a>
+            <a href="index.html" class="nav-button">بازگشت به فهرست</a>
+            <span></span> </nav>
+
+        <section id="section-6">
+            <h2 class="section-title">۶. بنیان فنی: قدرت موتور گودو</h2>
+            
+            <p>
+                بازی "Rust and Roots" با استفاده از موتور بازی‌سازی <strong>گودو (Godot Engine)</strong> ساخته شده است. انتخاب این موتور به دلیل ماهیت رایگان و متن-باز، جامعه فعال و ابزارهای قدرتمند و یکپارچه برای ساخت بازی‌های دوبعدی، به عنوان انتخاب اصلی برای این پروژه در نظر گرفته شد. در این بخش، به بررسی قابلیت‌های کلیدی گودو که ستون‌های فنی این بازی را تشکیل داده‌اند، می‌پردازیم.
+            </p>
+            <h3>۶.۱: معماری صحنه و نود (Scene & Node)</h3>
+            <p>
+                فلسفه اصلی گودو بر پایه ساختار درختی از **نودها (Nodes)** و ترکیب آن‌ها در قالب **صحنه‌ها (Scenes)** استوار است. ما از این معماری ماژولار به طور کامل بهره برده‌ایم. هر عنصر در بازی، یک صحنه مستقل است:
+            </p>
+            <ul>
+                <li><strong>صحنه بازیکن (`player.tscn`):** شامل تمام منطق حرکت، پرش، تیراندازی و انیمیشن‌های پینکو.</li>
+                <li><strong>صحنه دشمنان (`enemy.tscn`):** شامل ظاهر، رفتار و منطق مرگ دشمنان.</li>
+                <li><strong>صحنه گلوله (`bullet.tscn`):** شامل منطق حرکت و برخورد پرتابه.</li>
+            </ul>
+            <p>
+                این ساختار به ما اجازه می‌دهد تا هر جزء را به صورت جداگانه طراحی و تست کنیم و سپس به راحتی آن‌ها را در صحنه‌های مراحل مختلف بازی، نمونه‌سازی (instantiate) کرده و در کنار هم قرار دهیم.
+            </p>
+            <h3>۶.۲: زبان اسکریپت‌نویسی GDScript</h3>
+            <p>
+                تمام منطق گیم‌پلی بازی "Rust and Roots" با استفاده از <strong>GDScript</strong>، زبان اسکریپت‌نویسی اختصاصی گودو، پیاده‌سازی شده است. این زبان به دلیل سینتکس ساده و شبیه به پایتون و همچنین یکپارچگی عمیق با موتور گودو، سرعت توسعه را به شدت افزایش داده است.
+            </p>
+
+            <h3>۶.۳: سیستم فیزیک و برخورد (Physics & Collision)</h3>
+            <p>
+                گودو یک سیستم فیزیک دوبعدی قدرتمند ارائه می‌دهد که ما از آن برای ایجاد حرکتی روان و تعاملاتی دقیق بهره برده‌ایم:
+            </p>
+            <ul>
+                <li><strong>CharacterBody2D:</strong> این نود برای شخصیت اصلی (پینکو) استفاده شده است. با استفاده از تابع داخلی <code>move_and_slide()</code>، ما توانستیم حرکتی روان و مبتنی بر فیزیک را پیاده‌سازی کنیم که به طور خودکار با دیوارها و زمین برخورد می‌کند.</li>
+                <li><strong>Area2D:</strong> این نود برای تشخیص همپوشانی بدون ایجاد برخورد فیزیکی (یعنی شخصیت از داخل آن رد می‌شود) بسیار حیاتی است. ما از این نود برای تشخیص ورود بازیکن به مناطق مختلف استفاده کرده‌ایم، از جمله:
+                    <ul>
+                        <li>جمع‌آوری سیب‌ها</li>
+                        <li>افتادن در مناطق مرگبار</li>
+                        <li>پرش روی ترامپولین‌ها</li>
+                        <li>برخورد گلوله با دشمنان</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>۶.۴: انیمیشن و سیگنال‌ها (Animation & Signals)</h3>
+            <h4>سیستم انیمیشن</h4>
+            <p>
+                برای جان بخشیدن به شخصیت پینکو و دشمنان، از نود <strong>AnimatedSprite2D</strong> استفاده شده است. این نود به ما اجازه می‌دهد تا انیمیشن‌های فریم به فریم مختلفی مانند دویدن (`run`)، پرش (`jump`)، پرش دوتایی (`double_jump`) و مرگ (`death`) را بر اساس وضعیت فعلی بازیکن پخش کنیم.
+            </p>
+            <h4>سیستم سیگنال‌ها</h4>
+            <p>
+                سیگنال‌ها یکی از قدرتمندترین ویژگی‌های گودو برای ایجاد ارتباط بین نودها بدون وابستگی مستقیم هستند. در این پروژه، سیگنال‌ها نقش سیستم عصبی بازی را ایفا می‌کنند:
+            </p>
+            <ul>
+                <li><strong>body_entered:</strong> این سیگنال که توسط نودهای `Area2D` منتشر می‌شود، به ما اطلاع می‌دهد که یک جسم فیزیکی (مانند بازیکن) وارد یک منطقه خاص شده است. این اساس کارکرد آیتم‌ها، تله‌ها و ترامپولین‌هاست.</li>
+                <li><strong>animation_finished:</strong> این سیگنال که توسط `AnimatedSprite2D` منتشر می‌شود، به ما اجازه می‌دهد تا یک عمل خاص را دقیقاً پس از اتمام یک انیمیشن اجرا کنیم. ما از این قابلیت برای بارگذاری مجدد صحنه پس از تمام شدن انیمیشن مرگ پینکو استفاده کرده‌ایم.</li>
+            </ul>
+
+
+            <div id="part3-placeholder"></div>
+
+        </section>
+    </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GDD - بخش ششم: بنیان فنی</title>
+    <style>
+        /* CSS کامل و یکسان با صفحات دیگر در اینجا قرار دارد */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Lalezar&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap');
+        :root {
+            --font-pixel: 'Press Start 2P', cursive; --font-title-fa: 'Lalezar', cursive; --font-body: 'Vazirmatn', sans-serif;
+            --color-bg: #1e1e1e; --color-paper: #3d3d3d; --color-text: #ecf0f1; --color-primary: #e74c3c;
+            --color-secondary: #e84393; --color-accent: #f1c40f; --color-dark-shadow: #121212;
+        }
+        body { background-color: var(--color-bg); font-family: var(--font-body); color: var(--color-text); }
+        .page { background-color: var(--color-paper); width: 21cm; min-height: 29.7cm; padding: 1.5cm; margin: 2rem auto; border: 5px solid var(--color-dark-shadow); box-shadow: 10px 10px 0px var(--color-dark-shadow); box-sizing: border-box; }
+        h2 { font-family: var(--font-title-fa); font-size: 38px; border-bottom: 5px solid var(--color-dark-shadow); padding-bottom: 15px; margin-top: 40px; margin-bottom: 25px; color:#fff; }
+        h3 { font-family: var(--font-title-fa); font-size: 28px; color: var(--color-accent); text-shadow: 2px 2px 0 var(--color-dark-shadow); margin-top: 35px; margin-bottom: 15px; }
+        h4 { font-family: var(--font-pixel); font-size: 16px; color: var(--color-secondary); text-shadow: 1px 1px 0 var(--color-dark-shadow); margin-top: 30px; margin-bottom: 15px; border-bottom: 2px dotted rgba(255,255,255,0.2); padding-bottom: 10px; }
+        p { font-size: 16px; line-height: 1.9; text-align: justify; }
+        strong { font-weight: 700; color: #fff; }
+        code { background-color: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; font-family: var(--font-pixel); font-size: 14px; color: var(--color-accent); }
+        ul { list-style: none; padding-right: 25px; }
+        li { padding: 15px 15px 15px 0; margin-bottom: 12px; position: relative; }
+        li::before { content: '>'; font-family: var(--font-pixel); color: var(--color-secondary); font-size: 20px; position: absolute; right: -25px; top: 18px; text-shadow: 1px 1px 0 var(--color-dark-shadow); }
+        .page-nav { display:flex; justify-content:space-between; align-items: center; margin-bottom: 2rem; border-bottom: 4px solid var(--color-dark-shadow); padding-bottom: 1rem;}
+        .nav-button { text-decoration: none; font-family: var(--font-body); font-weight: 700; background-color: #4a4a4a; color: #fff; padding: 10px 20px; border: 2px solid var(--color-dark-shadow); border-bottom-width: 5px; transition: all 0.1s ease; } .nav-button:hover { background-color: var(--color-accent); color: var(--color-dark-shadow);}
+    </style>
+</head>
+<body>
+    <div class="page">
+        <nav class="page-nav">
+            <a href="section5.html" class="nav-button">&lt; بخش قبلی</a>
+            <a href="index.html" class="nav-button">بازگشت به فهرست</a>
+        </nav>
+
+        <section id="section-6">
+            <h2 class="section-title">۶. بنیان فنی: قدرت موتور گودو</h2>
+            
+            <p>بازی "Rust and Roots" با استفاده از موتور بازی‌سازی <strong>گودو (Godot Engine)</strong> ساخته شده است. این موتور به دلیل ماهیت رایگان و متن-باز، جامعه فعال و ابزارهای قدرتمند و یکپارچه برای ساخت بازی‌های دوبعدی، به عنوان انتخاب اصلی برای این پروژه در نظر گرفته شد.</p>
+            <h3>۶.۱: معماری صحنه و نود (Scene & Node)</h3>
+            <p>فلسفه اصلی گودو بر پایه ساختار درختی از **نودها (Nodes)** و ترکیب آن‌ها در قالب **صحنه‌ها (Scenes)** استوار است. ما از این معماری ماژولار به طور کامل بهره برده‌ایم و هر عنصر در بازی، یک صحنه مستقل است. این روش، توسعه و مدیریت پروژه را بسیار ساده‌تر می‌کند.</p>
+            
+            <h3>۶.۲: زبان اسکریپت‌نویسی GDScript</h3>
+            <p>تمام منطق گیم‌پلی بازی با استفاده از <strong>GDScript</strong>، زبان اسکریپت‌نویسی اختصاصی گودو، پیاده‌سازی شده است. این زبان به دلیل سینتکس ساده و شبیه به پایتون و همچنین یکپارچگی عمیق با موتور گودو، سرعت توسعه را به شدت افزایش داده است.</p>
+
+            <h3>۶.۳: سیستم فیزیک و برخورد (Physics & Collision)</h3>
+            <p>گودو یک سیستم فیزیک دوبعدی قدرتمند ارائه می‌دهد که ما از آن برای ایجاد حرکتی روان و تعاملاتی دقیق بهره برده‌ایم:
+                <ul>
+                    <li><strong>CharacterBody2D:</strong> این نود برای شخصیت اصلی (پینکو) استفاده شده است تا با استفاده از تابع داخلی <code>move_and_slide()</code>، حرکتی روان و مبتنی بر فیزیک داشته باشد.</li>
+                    <li><strong>Area2D:</strong> این نود برای تشخیص همپوشانی بدون ایجاد برخورد فیزیکی حیاتی است و اساس کارکرد آیتم‌ها، تله‌ها و ترامپولین‌هاست.</li>
+                </ul>
+            </p>
+
+            <h3>۶.۴: انیمیشن و سیگنال‌ها (Animation & Signals)</h3>
+            <p>برای جان بخشیدن به شخصیت‌ها از نود <strong>AnimatedSprite2D</strong> استفاده شده است. همچنین، <strong>سیستم سیگنال‌ها</strong> به عنوان سیستم عصبی بازی عمل می‌کند و به نودها اجازه می‌دهد بدون وابستگی مستقیم با هم ارتباط برقرار کنند. سیگنال‌هایی مانند <code>body_entered</code> و <code>animation_finished</code> در این پروژه نقش کلیدی دارند.</p>
+
+            <h3>۶.۵: مدیریت ورودی و رابط کاربری (Input & UI)</h3>
+            <h4>سیستم ورودی (Input Map)</h4>
+            <p>
+                به جای استفاده از کلیدهای سخت‌کد شده، ما از سیستم <strong>Input Map</strong> گودو بهره برده‌ایم. تمام اعمال بازیکن مانند حرکت، پرش و شلیک به نام‌های مشخصی (مانند <code>"MOVE_LEFT"</code>، <code>"JUMP"</code>، <code>"shoot"</code>) نگاشت شده‌اند. این کار به ما اجازه می‌دهد که در آینده به راحتی کنترل‌های بازی را برای کیبورد و حتی گیم‌پد تغییر دهیم یا به بازیکن اجازه شخصی‌سازی آن‌ها را بدهیم.
+            </p>
+            <h4>نودهای رابط کاربری (UI Nodes)</h4>
+            <p>
+                رابط کاربری بازی، از جمله منوی اصلی و نمایشگر اطلاعات داخل بازی (HUD)، با استفاده از نودهای کنترلی گودو (که از <code>Control</code> ارث‌بری می‌کنند) ساخته شده است. برای نمایش تعداد سیب‌ها، از یک نود <code>Label</code> استفاده شده که در داخل یک <code>CanvasLayer</code> قرار گرفته تا موقعیت آن همیشه روی صفحه ثابت بماند.
+            </p>
+
+            <h3>۶.۶: مدیریت وضعیت سراسری (Global State - Autoload)</h3>
+            <p>
+                برای مدیریت سیستم‌هایی که باید در تمام طول بازی در دسترس باشند و با تغییر صحنه از بین نروند، از قابلیت قدرتمند <strong>Autoload (Singleton)</strong> گودو استفاده کرده‌ایم. در این پروژه، نود <code>Music</code> به عنوان یک Autoload تعریف شده است تا مدیریت تمام افکت‌های صوتی و موسیقی متن بازی را به صورت متمرکز و سراسری بر عهده بگیرد. این روش تضمین می‌کند که با رفتن از یک مرحله به مرحله دیگر، موسیقی قطع نمی‌شود و دسترسی به توابع پخش صدا همیشه آسان است.
+            </p>
+
+        </section>
+    </div>
+</body>
+</html>

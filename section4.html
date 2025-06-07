@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GDD - بخش چهارم: هویت بصری و صوتی</title>
+    <style>
+        /* CSS کامل و یکسان با صفحات دیگر در اینجا قرار دارد */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Lalezar&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap');
+        :root {
+            --font-pixel: 'Press Start 2P', cursive; --font-title-fa: 'Lalezar', cursive; --font-body: 'Vazirmatn', sans-serif;
+            --color-bg: #1e1e1e; --color-paper: #3d3d3d; --color-text: #ecf0f1; --color-primary: #e74c3c;
+            --color-secondary: #e84393; --color-accent: #f1c40f; --color-dark-shadow: #121212;
+        }
+        body { background-color: var(--color-bg); font-family: var(--font-body); color: var(--color-text); }
+        .page { background-color: var(--color-paper); width: 21cm; min-height: 29.7cm; padding: 1.5cm; margin: 2rem auto; border: 5px solid var(--color-dark-shadow); box-shadow: 10px 10px 0px var(--color-dark-shadow); box-sizing: border-box; }
+        h2 { font-family: var(--font-title-fa); font-size: 38px; border-bottom: 5px solid var(--color-dark-shadow); padding-bottom: 15px; margin-top: 40px; margin-bottom: 25px; color:#fff; }
+        h3 { font-family: var(--font-title-fa); font-size: 28px; color: var(--color-accent); text-shadow: 2px 2px 0 var(--color-dark-shadow); margin-top: 35px; margin-bottom: 15px; }
+        h4 { font-family: var(--font-pixel); font-size: 18px; color: var(--color-secondary); text-shadow: 2px 2px 0 var(--color-dark-shadow); margin-top: 30px; margin-bottom: 15px; border-bottom: 2px dotted var(--color-dark-shadow); padding-bottom: 10px; }
+        p { font-size: 16px; line-height: 1.9; text-align: justify; }
+        ul { list-style: none; padding-right: 25px; }
+        li { padding: 15px 15px 15px 0; margin-bottom: 12px; position: relative; }
+        li::before { content: '>'; font-family: var(--font-pixel); color: var(--color-secondary); font-size: 20px; position: absolute; right: -25px; top: 18px; text-shadow: 1px 1px 0 var(--color-dark-shadow); }
+        strong { font-weight: 700; color: #fff; }
+        .page-nav { display:flex; justify-content:space-between; margin-bottom: 2rem; border-bottom: 4px solid var(--color-dark-shadow); padding-bottom: 1rem;}
+        .nav-button { text-decoration: none; font-family: var(--font-body); font-weight: 700; background-color: #4a4a4a; color: #fff; padding: 10px 20px; border: 2px solid var(--color-dark-shadow); border-bottom-width: 5px; transition: all 0.1s ease; } .nav-button:hover { background-color: var(--color-accent); color: var(--color-dark-shadow);}
+    </style>
+</head>
+<body>
+    <div class="page">
+        <nav class="page-nav">
+            <a href="section3.html" class="nav-button">&lt; بخش قبلی</a>
+            <a href="index.html" class="nav-button">بازگشت به فهرست</a>
+            <a href="section5.html" class="nav-button">بخش بعدی &gt;</a>
+        </nav>
+
+        <section id="section-4">
+            <h2 class="section-title">۴. هویت بصری و صوتی</h2>
+            
+            <h3>کارگردانی هنری: یک دنیای پیکسلی با روح</h3>
+            <p>
+                هدف ما در طراحی بصری "Rust and Roots"، خلق دنیایی است که همزمان حس نوستالژی بازی‌های کلاسیک را زنده کند و هم هویت منحصربه‌فرد خود را داشته باشد. سبک اصلی، <strong>هنر پیکسلی (Pixel Art)</strong> است که با دقت و ظرافت اجرا می‌شود تا جزئیات محیط و شخصیت‌ها به خوبی قابل تشخیص باشند.
+            </p>
+            <h4>پالت رنگی</h4>
+            <p>
+                پالت رنگی بازی بر اساس تضاد بین دو مفهوم اصلی داستان شکل گرفته است:
+                <ul>
+                    <li><strong>رنگ‌های طبیعت:</strong> سبزهای شاداب و قهوه‌ای‌های خاکی برای نمایش "ریشه‌ها" و امید به زندگی.</li>
+                    <li><strong>رنگ‌های صنعتی:</strong> خاکستری‌های سرد و فلزی برای به تصویر کشیدن "زنگار" و بقایای ماشین‌آلات.</li>
+                    <li><strong>رنگ‌های شاخص:</strong> صورتی درخشان برای پینکو و قرمز پررنگ برای سیب‌ها، باعث می‌شود تا این عناصر کلیدی در هر لحظه به خوبی در محیط دیده شوند.
+                </ul>
+            </p>
+            <h4>طراحی شخصیت و محیط</h4>
+            <p>
+                طراحی <strong>پینکو</strong> ساده، کوچک و دوست‌داشتنی است تا بازیکن به سرعت با او ارتباط برقرار کند. در مقابل، دشمنان مانند <strong>کله تیغی</strong> ظاهری سخت و مکانیکی دارند. این تضاد در محیط نیز دیده می‌شود، جایی که گیاهان و درختان از دل سکوهای فلزی و آجرهای فرسوده بیرون زده‌اند و داستانی خاموش از گذشته‌ی این سرزمین را روایت می‌کنند.
+            </p>
+
+            <h3>طراحی صدا: سمفونی ریشه و زنگار</h3>
+            <p>
+                صدا و موسیقی در "Rust and Roots" نقشی حیاتی در ساختن اتمسفر و ارائه بازخورد به بازیکن دارد. هدف ما ایجاد یک تجربه شنیداری است که به اندازه تجربه بصری، به‌یادماندنی باشد.
+            </p>
+            <h4>موسیقی متن</h4>
+            <p>
+                موسیقی بازی ترکیبی از ملودی‌های ماجراجویانه و تم‌های آرام و کمی غم‌انگیز خواهد بود. موسیقی در مناطق سرسبز حس امید را القا می‌کند، در حالی که در نزدیکی سازه‌های صنعتی، مرموزتر و ماشینی‌تر می‌شود تا حس خطر را افزایش دهد. موسیقی اصلی بازی از طریق نود سراسری `Music` مدیریت می‌شود.
+            </p>
+            <h4>افکت‌های صوتی (SFX)</h4>
+            <p>
+                افکت‌های صوتی باید کوتاه، واضح و رضایت‌بخش باشند تا هر عمل بازیکن بازخورد شنیداری مناسبی داشته باشد. تمام صداها از طریق Autoload `Music` پخش می‌شوند:
+                <ul>
+                    <li><strong>صدای پرش و پرش دوتایی:</strong> صدایی فنری و پرانرژی.</li>
+                    <li><strong>صدای تیراندازی:</strong> یک صدای "پیو" مانند کوتاه و سریع.</li>
+                    <li><strong>صدای راه رفتن:</strong> صدای قدم‌های ریتمیک که هنگام حرکت پخش و هنگام توقف، قطع می‌شود.</li>
+                    <li><strong>صدای جمع‌آوری سیب:</strong> صدایی دلنشین و تشویق‌کننده.</li>
+                    <li><strong>صدای انفجار دشمن:</strong> یک صدای انفجار پیکسلی کوتاه.</li>
+                    <li><strong>صدای مرگ پینکو:</strong> یک صدای کوتاه و تأثیرگذار که شکست را به خوبی نشان دهد.</li>
+                </ul>
+            </p>
+        </section>
+    </div>
+</body>
+</html>
